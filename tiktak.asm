@@ -1,6 +1,3 @@
-;---------------TA THANH THIEN--------------------  
-
-
 ;TIC-TAC-TOE  
 .MODEL SMALL
 .STACK 100H
@@ -104,11 +101,6 @@ CLRSCR MACRO
     MOV DX, 184FH
     INT 10H
 ENDM     
-
-
-
-;-----------------LE VIET KIEN-------------------
-
 .CODE
 MAIN PROC
     MOV AX, @DATA
@@ -184,11 +176,7 @@ MAIN PROC
         P2:
             MOV PLAYER, 50
             MOV CUR, 79
-            JMP BOARD       
-            
-                    
-; ---------------------------VU NGOC TU--------------------------
-                                            
+            JMP BOARD                                               
 ; ------------ KIEM TRA CHIEN THANG -----------
     CHECKWIN:    
        CHECK1: CHECKWIN C1, C2, C3, CHECK2
@@ -254,13 +242,7 @@ MAIN PROC
         CMP DONE, 1
         JZ VICTORY 
         CMP DR, 1
-        JZ DRAW               
-        
-        
-        
-;-------------------------BUI QUANG HUNG------------------------
-
-        
+        JZ DRAW                    
 ; ------------ DAU VAO --------------
   INPUT:  
     PRINT W1
