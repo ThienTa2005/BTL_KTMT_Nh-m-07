@@ -1,7 +1,6 @@
 .model small 
 .stack 100h 
 .data
-   
     x_float_count db 0
     x        dw 0    
     y        dw 0
@@ -15,8 +14,7 @@
 ;error
 ;---------------------------------------------------  
     div0msg db "Div0!$"                             
-;---------------------------------------------------
- 
+;--------------------------------------------------- 
 ;print lines
 ;---------------------------------------------------                           
     l0   db 201,21 dup(205),187,'$'
@@ -83,18 +81,14 @@ number_in  macro  n,operand,lenth
     local l1,l1_2,l1_2_1,l1_3
     local l2,l3,l4
     local next_step, store_operand
-
     pusha
-    
-      
     mov lenth, 0  
     lea si, buffer         
     
 l1:
     mov ah, 08h            ;nhap ki tu vao ban phim 
     int 21h
-    mov key, al
-    
+    mov key, al  
 l1_2: 
     cmp lenth, 0
     jne next_step
@@ -107,7 +101,6 @@ next_step:
     jb l2
     cmp al, '9'
     ja l2
-
 l1_3:
     mov al, key
     mov [si], al
@@ -119,7 +112,6 @@ l1_3:
     inc si
     inc lenth
     jmp l1
-
 ; ==============================
 l2: 
     cmp al, '+'
@@ -133,25 +125,19 @@ l2:
     cmp al, '='
     je store_operand
     jmp l1  
-
 ; ==============================
 store_operand:
     cmp lenth, 0
     je l4  
     gotoxy 26,3
-    mov operand, al  
-
- 
+    mov operand, al   
     mov dl, operand           ;in ra toan tu ( + - * / ) da nhap 
     mov ah, 02h
     int 21h
-
-   
     lea si, buffer
     mov cx, lenth
     mov dx, 0
     mov bx, 10
-
 l3:                          ; in ra ket qua 
     mov ax, dx
     mul bx
@@ -162,22 +148,16 @@ l3:                          ; in ra ket qua
     add dx, ax
     inc si
     loop l3
-
     mov n, dx
-
 l4:
     mov n, dx
     gotoxy 24,3
     popa
-endm
-
- 
-     
+endm   
 ;---------------------------------------------------
 putrez macro buffer,x
        local next_digit,pz1,pz2
        local nex1,nex2
-     
        pusha
        mov ax,x             
        mov cl,x_float_count
@@ -187,14 +167,12 @@ putrez macro buffer,x
        mov [si+5],'0'
        mov [si+4],'.'
        mov [si+3],'0'
-       
     ;........................                         
        next_digit: 
         cmp cl,0
         jne nex1
         cmp x_float_count,0
         jne nex2
-        
         mov [si+5],'0'
         dec si
     nex2:    
@@ -203,8 +181,7 @@ putrez macro buffer,x
         dec si
         dec cl
         dec x_float_count
-        jmp next_digit
-         
+        jmp next_digit   
     nex1:
         mov dx,0            ; buffer 
         div bx             
@@ -214,14 +191,9 @@ putrez macro buffer,x
         dec cl
         cmp ax,0
         jne next_digit
-         
-     
    ;.........................          
        gotoxy 17,3          ;print buffer
        putstr buffer 
-        
-      
-       
    pz1:
        cmp xsighn,1
        jne pz2
@@ -240,40 +212,30 @@ reset macro
        mov operand1,0
        mov operand2,0
 endm
-
-
 .code
-
 start:
 ; set segment registers:
     mov ax, @data
     mov ds, ax    
-
 call print_screen    
- 
 begin:
       reset
       calc1:
           number_in x,operand1,lenth
           mov al,operand1
           cmp al,'='  
-          je calc1          
-          
+          je calc1                    
       calc2:
           number_in y,operand2,lenth
           mov al,operand2
           cmp al,'='
           jne calc1          ;if not '=', restart (invalid input)
-          call calculate
-              
+          call calculate     
           putrez buffer,x    ;display result
           mov x_float_count, 0
           mov xsighn,0
           jmp calc1          ;start again for new calculation
- 
-
 ;--------------------------------------------------
- 
 print_screen proc :
         gotoxy 10,0;...........
         putstr l0
@@ -310,12 +272,8 @@ print_screen proc :
         gotoxy 10,16;.......  ;  
         putstr l6_2      ;
         gotoxy 10,17    
-        putstr l7 
-        
-         
+        putstr l7  
         ;keyboard labels
-        
-        
         gotoxy 13,6
         putch '7',14
         gotoxy 17,6
